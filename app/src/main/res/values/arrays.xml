@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="floor_one">
+        <item>Auditorium</item>
+        <item>Gudang</item>
+        <item>Perpustakaan</item>
+        <item>Ruang 101</item>
+        <item>Ruang 102</item>
+        <item>Ruang 103</item>
+        <item>Ruang Transit</item>
+        <item>SSC</item>
+        <item>Tangga</item>
+        <item>Toilet Pria</item>
+        <item>Toilet VIP</item>
+        <item>Toilet Wanita</item>
+    </array>
+
+    <array name="floor_two">
+        <item>Auditorium</item>
+        <item>Gudang</item>
+        <item>Perpustakaan</item>
+    </array>
+
+    <array name="floor_three">
+        <item>Auditorium</item>
+        <item>Gudang</item>
+        <item>Perpustakaan</item>
+    </array>
+</resources>

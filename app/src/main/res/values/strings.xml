@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">BLE IPS</string>
+
+    <string name="label_search_route">Search Route</string>
+    <string name="label_testing">Testing</string>
+    <string name="label_about">About</string>
+    <string name="label_map">Map</string>
+
+    <string name="text_floor_one">Lantai 1</string>
+    <string name="text_floor_two">Lantai 2</string>
+    <string name="text_floor_three">Lantai 3</string>
+
+    <string name="dialog_yes">Yes</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_no">No</string>
+
+</resources>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/group_feature"
+           android:checkableBehavior="single">
+        <item
+                android:checked="true"
+                android:id="@+id/nav_drawer_search_route"
+                android:icon="@drawable/ic_navigation_black_24dp"
+                android:title="@string/label_search_route" />
+        <item
+                android:id="@+id/nav_drawer_testing"
+                android:icon="@drawable/ic_assignment_black_24dp"
+                android:title="@string/label_testing" />
+        <item
+                android:id="@+id/nav_drawer_about"
+                android:icon="@drawable/ic_info_outline_black_24dp"
+                android:title="@string/label_about" />
+    </group>
+</menu>
