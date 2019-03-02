@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="floor_one">
-        <item>Auditorium</item>
-        <item>Gudang</item>
+        <item>Pintu Masuk Lobby</item>
+        <item>Ruang Admisi</item>
         <item>Perpustakaan</item>
-        <item>Ruang 101</item>
-        <item>Ruang 102</item>
         <item>Ruang 103</item>
-        <item>Ruang Transit</item>
-        <item>Student Service Center</item>
+        <item>Ruang 102</item>
+        <item>Ruang 101</item>
         <item>Tangga</item>
+        <item>Student Service Center</item>
+        <item>Gudang</item>
         <item>Toilet Pria</item>
-        <item>Toilet VIP</item>
         <item>Toilet Wanita</item>
+        <item>Toilet VIP</item>
+        <item>Auditorium</item>
     </array>
 
     <array name="floor_two">

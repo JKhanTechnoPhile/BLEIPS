@@ -14,8 +14,8 @@ import kotlinx.android.synthetic.main.fragment_floor_three.*
 
 class FloorThreeFragment : Fragment() {
 
-    lateinit var rootLayout:View
-    lateinit var floors:Array<String>
+    private lateinit var rootLayout:View
+    private lateinit var floors:Array<String>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,7 +44,9 @@ class FloorThreeFragment : Fragment() {
             .setPositiveButton(R.string.dialog_yes
             ) { dialog, which ->
                 val intent = Intent(rootLayout.context, MapActivity::class.java).apply {
-                    putExtra("destination", position)
+                    putExtra("destination", position + 1)
+                    putExtra("floor_dest", 3)
+                    putExtra("current_floor", 1)
                 }
                 startActivity(intent)
             }
