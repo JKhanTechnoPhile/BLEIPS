@@ -13,10 +13,9 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.Base"
-            tools:ignore="GoogleAppIndexingWarning"
-            android:fullBackupContent="">
+            tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:launchMode="singleTop" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -25,14 +24,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MapActivity"
+            android:name=".activity.MapActivity"
             android:label="@string/label_map"
             android:theme="@style/Theme.Base.ActionBar"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".activity.MainActivity" >
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
-                    android:value=".MainActivity" />
+                    android:value=".activity.MainActivity" />
         </activity>
     </application>
 

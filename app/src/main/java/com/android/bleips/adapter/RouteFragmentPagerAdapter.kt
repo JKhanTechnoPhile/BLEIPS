@@ -2,35 +2,26 @@ package com.android.bleips.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
-import com.android.bleips.fragment.FloorOneFragment
-import com.android.bleips.fragment.FloorThreeFragment
-import com.android.bleips.fragment.FloorTwoFragment
+import androidx.fragment.app.FragmentStatePagerAdapter
+import com.android.bleips.fragment.ListRouteFragment
 
-class RouteFragmentPagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm){
+class RouteFragmentPagerAdapter(fm: FragmentManager, noOfItems: Int): FragmentStatePagerAdapter(fm) {
 
-    // sebuah list yang menampung objek Fragment
-    private val pages = listOf(
-        FloorOneFragment(),
-        FloorTwoFragment(),
-        FloorThreeFragment()
-    )
+    private var noOfItems = 0
 
-    // menentukan fragment yang akan dibuka pada posisi tertentu
-    override fun getItem(position: Int): Fragment {
-        return pages[position]
+    init {
+        this.noOfItems = noOfItems
     }
 
-    override fun getCount(): Int {
-        return pages.size
+    override fun getItem(position: Int) : Fragment {
+        return ListRouteFragment.newInstance(position + 1, ListRouteFragment())
     }
 
-    // judul untuk tabs
-    override fun getPageTitle(position: Int): CharSequence? {
-        return when(position){
-            0 -> "Lantai 1"
-            1 -> "Lantai 2"
-            else -> "Lantai 3"
-        }
+    override fun getCount() : Int {
+        return noOfItems
+    }
+
+    override fun getPageTitle(position: Int) : CharSequence {
+        return "FLOOR "+ (position + 1)
     }
 }

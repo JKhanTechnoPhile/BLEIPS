@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <array name="floor_one">
+    <array name="f1">
         <item>Pintu Masuk Lobby</item>
         <item>Ruang Admisi</item>
         <item>Perpustakaan</item>
@@ -16,13 +16,13 @@
         <item>Auditorium</item>
     </array>
 
-    <array name="floor_two">
+    <array name="f2">
         <item>Auditorium</item>
         <item>Gudang</item>
         <item>Perpustakaan</item>
     </array>
 
-    <array name="floor_three">
+    <array name="f3">
         <item>Auditorium</item>
         <item>Gudang</item>
         <item>Perpustakaan</item>

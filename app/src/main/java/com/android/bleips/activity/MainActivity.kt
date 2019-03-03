@@ -1,4 +1,4 @@
-package com.android.bleips
+package com.android.bleips.activity
 
 import android.os.Bundle
 import android.view.MenuItem
@@ -8,6 +8,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import com.android.bleips.R
 import com.android.bleips.fragment.AboutFragment
 import com.android.bleips.fragment.SearchRouteFragment
 import com.android.bleips.fragment.TestingFragment
@@ -70,7 +71,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         if(savedInstanceState == null){
-            supportFragmentManager.beginTransaction().add(R.id.content_frame,
+            supportFragmentManager.beginTransaction().add(
+                R.id.content_frame,
                 SearchRouteFragment()
             ).commit()
         }

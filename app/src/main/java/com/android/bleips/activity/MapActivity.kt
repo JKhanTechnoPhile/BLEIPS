@@ -1,4 +1,4 @@
-package com.android.bleips
+package com.android.bleips.activity
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -8,10 +8,12 @@ import android.os.Build
 import android.os.Bundle
 import android.os.RemoteException
 import android.util.Log
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.android.bleips.R
 import com.android.bleips.util.Calculator
+import com.android.bleips.util.DialogBuilder
 import com.android.bleips.util.JsonParser
+import com.android.bleips.util.ResourceHelper
 import com.beust.klaxon.JsonObject
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
@@ -47,16 +49,19 @@ class MapActivity : AppCompatActivity(), BeaconConsumer {
         floorDestination = intent.getIntExtra("floor_dest", -1)
         currentFloor = intent.getIntExtra("current_floor", -1)
 
+        Log.i(TAG, "Current Floor = $currentFloor")
+
         verifyBluetooth()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             // Android M Permission check
             if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
-                val builder = AlertDialog.Builder(this)
-                builder.setTitle("This app needs location access")
-                builder.setMessage("Please grant location access so this app can detect beacons in the background.")
-                builder.setPositiveButton(android.R.string.ok, null)
+                val builder = DialogBuilder.createDialog(
+                    this,
+                    "error_location_services_disabled",
+                    1
+                )
                 builder.setOnDismissListener {
                     requestPermissions(
                         arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
@@ -72,8 +77,7 @@ class MapActivity : AppCompatActivity(), BeaconConsumer {
 
         recreateGraph()
 
-        image_view.orientation = SubsamplingScaleImageView.ORIENTATION_90
-        image_view.setImage(ImageSource.resource(R.drawable.floor_1))
+        setMapBackground()
     }
 
     override fun onBeaconServiceConnect() {
@@ -116,6 +120,7 @@ class MapActivity : AppCompatActivity(), BeaconConsumer {
 
         try {
             beaconManager.startRangingBeaconsInRegion(Region("myRangingUniqueId", null, null, null))
+            beaconManager.removeAllRangeNotifiers()
             beaconManager.addRangeNotifier(rangeNotifier)
         } catch (e: RemoteException) { }
     }
@@ -143,12 +148,11 @@ class MapActivity : AppCompatActivity(), BeaconConsumer {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Log.d(TAG, "coarse location permission granted")
                 } else {
-                    val builder = AlertDialog.Builder(this)
-                    builder.setTitle("Functionality limited")
-                    builder.setMessage("Since location access has not been granted, this app will not be able to discover beacons when in the background.")
-                    builder.setPositiveButton(android.R.string.ok, null)
-                    builder.setOnDismissListener {}
-                    builder.show()
+                    val builder = DialogBuilder.createDialog(
+                        this,
+                        "error_location_permission_missing",
+                        0
+                    ).show()
                 }
             }
         }
@@ -157,21 +161,19 @@ class MapActivity : AppCompatActivity(), BeaconConsumer {
     private fun verifyBluetooth() {
         try {
             if (!BeaconManager.getInstanceForApplication(this).checkAvailability()) {
-                val builder = AlertDialog.Builder(this)
-                builder.setTitle("Bluetooth not enabled")
-                builder.setMessage("Please enable bluetooth in settings and restart this application.")
-                builder.setPositiveButton(android.R.string.ok, null)
-                builder.setOnDismissListener {}
-                builder.show()
+                val builder = DialogBuilder.createDialog(
+                    this,
+                    "error_bluetooth_disabled",
+                    0
+                ).show()
             }
         }
         catch (e: RuntimeException) {
-            val builder = AlertDialog.Builder(this)
-            builder.setTitle("Bluetooth LE not available")
-            builder.setMessage("Sorry, this device does not support Bluetooth LE.")
-            builder.setPositiveButton(android.R.string.ok, null)
-            builder.setOnDismissListener {}
-            builder.show()
+            val builder = DialogBuilder.createDialog(
+                this,
+                "error_bluetooth_not_available",
+                0
+            ).show()
         }
     }
 
@@ -268,6 +270,17 @@ class MapActivity : AppCompatActivity(), BeaconConsumer {
         }
 
         graph = g.createUndirectedGraph()
+    }
+
+    private fun setMapBackground() {
+        val backgroundId = ResourceHelper.getResourceId(
+            this,
+            "f$currentFloor",
+            "drawable"
+        )
+
+        image_view.orientation = SubsamplingScaleImageView.ORIENTATION_90
+        image_view.setImage(ImageSource.resource(backgroundId))
     }
 
 }

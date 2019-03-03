@@ -7,11 +7,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.android.bleips.R
 import com.android.bleips.adapter.RouteFragmentPagerAdapter
+import kotlinx.android.synthetic.main.fragment_search_route.*
 import kotlinx.android.synthetic.main.fragment_search_route.view.*
 
 class SearchRouteFragment : Fragment() {
 
     lateinit var rootLayout:View
+    private var noOfTabs = 3
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +27,9 @@ class SearchRouteFragment : Fragment() {
         // Inflate the layout for this fragment
         rootLayout = inflater.inflate(R.layout.fragment_search_route, container, false)
 
-        rootLayout.viewpager_main.adapter = RouteFragmentPagerAdapter(childFragmentManager)
+        rootLayout.viewpager_main.adapter = RouteFragmentPagerAdapter(childFragmentManager, noOfTabs)
+
+        rootLayout.tabs_main.setupWithViewPager(viewpager_main)
 
         return rootLayout
     }
