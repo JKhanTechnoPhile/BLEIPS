@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.ListView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.android.bleips.R
@@ -45,7 +46,7 @@ class ListRouteFragment : Fragment(), BeaconConsumer {
         fun newInstance(sectionNumber: Int, listRouteFragment: ListRouteFragment) : ListRouteFragment {
             val fragment = ListRouteFragment()
             val args = Bundle()
-            args.putInt(listRouteFragment.ARG_SECTION_NUMBER, listRouteFragment.sectionNumber)
+            args.putInt(listRouteFragment.ARG_SECTION_NUMBER, sectionNumber)
             fragment.arguments = args
             return fragment
         }
@@ -53,12 +54,14 @@ class ListRouteFragment : Fragment(), BeaconConsumer {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sectionNumber = if (arguments != null) arguments!!.getInt(ARG_SECTION_NUMBER) else 1
+        sectionNumber = arguments!!.getInt(ARG_SECTION_NUMBER, 0)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootLayout = inflater.inflate(R.layout.fragment_list_route, container, false)
         mContext = rootLayout.context
+
+        val listFloors = rootLayout.findViewById(R.id.list_floors) as ListView
 
         loadingDialog = LoadingDialog[this.activity!!]
 
@@ -133,8 +136,9 @@ class ListRouteFragment : Fragment(), BeaconConsumer {
         super.onActivityCreated(savedInstanceState)
 
         floors = resources.getStringArray(
-            ResourceHelper.getResourceId(mContext, "f${sectionNumber + 1}", "array")
+            ResourceHelper.getResourceId(mContext, "f$sectionNumber", "array")
         )
+
         list_floors.adapter = ArrayAdapter(mContext, android.R.layout.simple_list_item_1, floors)
 
         list_floors.setOnItemClickListener { parent, view, position, id ->
@@ -149,7 +153,7 @@ class ListRouteFragment : Fragment(), BeaconConsumer {
                 if (isBluetoothVerified()) {
                     mapIntent = Intent(rootLayout.context, MapActivity::class.java)
                     mapIntent.putExtra("destination", position + 1)
-                    mapIntent.putExtra("floor_dest", sectionNumber + 1)
+                    mapIntent.putExtra("floor_dest", sectionNumber)
 
                     loadingDialog.show()
 

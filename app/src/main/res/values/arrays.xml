@@ -2,12 +2,12 @@
 <resources>
     <array name="f1">
         <item>Pintu Masuk Lobby</item>
-        <item>Ruang Admisi</item>
+        <item>Ruang Transit</item>
         <item>Perpustakaan</item>
         <item>Ruang 103</item>
         <item>Ruang 102</item>
         <item>Ruang 101</item>
-        <item>Tangga</item>
+        <item>Tangga Naik</item>
         <item>Student Service Center</item>
         <item>Gudang</item>
         <item>Toilet Pria</item>
@@ -17,14 +17,28 @@
     </array>
 
     <array name="f2">
-        <item>Auditorium</item>
-        <item>Gudang</item>
-        <item>Perpustakaan</item>
+        <item>Ruang 201</item>
+        <item>Ruang 202</item>
+        <item>Ruang 203</item>
+        <item>Ruang 206</item>
+        <item>Ruang 207</item>
+        <item>Ruang 208</item>
+        <item>Aula</item>
+        <item>Toilet Pria</item>
+        <item>Toilet Wanita</item>
+        <item>Ruang Transit</item>
+        <item>Tangga Naik</item>
+        <item>Tangga Turun</item>
     </array>
 
     <array name="f3">
-        <item>Auditorium</item>
+        <item>Musholla</item>
         <item>Gudang</item>
-        <item>Perpustakaan</item>
+        <item>Toilet Wanita</item>
+        <item>Toilet Pria</item>
+        <item>Ruang 301</item>
+        <item>Ruang 302</item>
+        <item>Tangga Turun</item>
+        <item>Taman Outdoor</item>
     </array>
 </resources>
