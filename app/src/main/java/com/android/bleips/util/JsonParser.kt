@@ -26,11 +26,11 @@ class JsonParser {
         }
 
         @Suppress("UNCHECKED_CAST")
-        fun getNode(jsonString: StringBuilder, roomCode: Int) : JsonObject {
+        fun getNode(jsonString: StringBuilder, roomCode: Int, floor: Int) : JsonObject {
             val jsonArray = Parser.default().parse((jsonString)) as JsonArray<JsonObject>
 
             val array = jsonArray.filter {
-                it.int("room_code") == roomCode
+                it.int("room_code") == roomCode && it.int("floor") == floor
             }
 
             return array.first()

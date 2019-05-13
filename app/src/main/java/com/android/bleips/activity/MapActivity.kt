@@ -108,6 +108,7 @@ class MapActivity : AppCompatActivity(), BeaconConsumer {
 
                 val nearestBeaconObj = getBeaconData(nearestBeacon.id2.toInt(), nearestBeacon.id3.toInt())
                 if (nearestBeaconObj.int("room_code")!! > 0) {
+                    Log.i(TAG, "nearestBeacon = ${currentLocation[0].toInt()} ${currentLocation[1].toInt()}")
                     drawRoute(Point(currentLocation[0].toInt(), currentLocation[1].toInt()),
                         nearestBeaconObj.int("room_code")!!
                     )
@@ -191,7 +192,7 @@ class MapActivity : AppCompatActivity(), BeaconConsumer {
             .bufferedReader().use { it.readText() })
 
         if (roomCode > 0) {
-            nodeOrigin = JsonParser.getNode(jsonString, roomCode)
+            nodeOrigin = JsonParser.getNode(jsonString, roomCode, currentFloor)
         }
         else {
             val nodeList = JsonParser.getNodes(jsonString, currentFloor, 0)
@@ -228,11 +229,11 @@ class MapActivity : AppCompatActivity(), BeaconConsumer {
         optimalPaths.forEach { l ->
             l.forEach { i ->
                 s += "${i.toString()} "
-                val node = JsonParser.getNode(jsonString, i!!)
+                val node = JsonParser.getNode(jsonString, i!!, currentFloor)
                 destinations.add(
                     PointF(
-                        node.int("x")!!.toFloat() * 2,
-                        node.int("y")!!.toFloat() * 2
+                       node.int("x")!!.toFloat(),
+                        node.int("y")!!.toFloat()
                     ))
 
                 c += "${node.int("x")} ${node.int("y")} "
@@ -242,6 +243,7 @@ class MapActivity : AppCompatActivity(), BeaconConsumer {
         Log.i(TAG, c)
 
         val origin = PointF(currentLocation.x.toFloat(), currentLocation.y.toFloat())
+        Log.i(TAG, "origin = ${origin.x} ${origin.y}")
         image_view.drawPoints(origin, destinations)
     }
 
