@@ -1,15 +1,16 @@
 package com.android.bleips.fragment
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.android.bleips.R
-import com.davemorrissey.labs.subscaleview.ImageSource
-import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
-import kotlinx.android.synthetic.main.fragment_testing.*
+import com.android.bleips.activity.DrawerTestActivity
+import com.android.bleips.activity.RangeTestActivity
+import kotlinx.android.synthetic.main.fragment_testing.view.*
 
 class TestingFragment : Fragment() {
 
@@ -24,14 +25,17 @@ class TestingFragment : Fragment() {
         rootView = inflater.inflate(R.layout.fragment_testing, container, false)
         mContext = rootView.context
 
+        rootView.btn_test_range.setOnClickListener {
+            val intent = Intent(mContext, RangeTestActivity::class.java)
+            startActivity(intent)
+        }
+
+        rootView.btn_test_multiple.setOnClickListener {
+            val intent = Intent(mContext, DrawerTestActivity::class.java)
+            startActivity(intent)
+        }
+
         return rootView
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        image_view.orientation = SubsamplingScaleImageView.ORIENTATION_90
-        image_view.setImage(ImageSource.resource(R.drawable.f1))
     }
 
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.android.bleips">
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.android.bleips">
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -15,8 +15,30 @@
             android:theme="@style/Theme.Base"
             tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".activity.MainActivity"
-            android:launchMode="singleTop" >
+                android:name=".activity.DrawerTestActivity"
+                android:label="@string/label_testing_drawer"
+                android:parentActivityName=".activity.MainActivity"
+                android:theme="@style/Theme.Base.ActionBar">
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value=".activity.MainActivity"/>
+        </activity>
+        <activity
+                android:name=".activity.RangeTestActivity"
+                android:label="@string/label_testing_range"
+                android:parentActivityName=".activity.MainActivity"
+                android:theme="@style/Theme.Base.ActionBar">
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value=".activity.MainActivity"/>
+        </activity>
+        <activity
+                android:name=".activity.MainActivity"
+                android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -24,14 +46,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.MapActivity"
-            android:label="@string/label_map"
-            android:theme="@style/Theme.Base.ActionBar"
-            android:parentActivityName=".activity.MainActivity" >
+                android:name=".activity.MapActivity"
+                android:label="@string/label_map"
+                android:parentActivityName=".activity.MainActivity"
+                android:theme="@style/Theme.Base.ActionBar">
+
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
-                    android:value=".activity.MainActivity" />
+                    android:value=".activity.MainActivity"/>
         </activity>
     </application>
 

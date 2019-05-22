@@ -5,10 +5,17 @@
     <string name="label_testing">Testing</string>
     <string name="label_about">About</string>
     <string name="label_map">Map</string>
+    <string name="label_testing_range">Beacon Range Test</string>
+    <string name="label_testing_drawer">Drawer Test</string>
 
     <string name="text_floor_one">Lantai 1</string>
     <string name="text_floor_two">Lantai 2</string>
     <string name="text_floor_three">Lantai 3</string>
+    <string name="text_test_range">Beacon Range</string>
+    <string name="text_test_drawing">Drawer Test</string>
+    <string name="text_test_start">Start</string>
+    <string name="text_test_stop">Stop</string>
+    <string name="text_about">Indoor Positioning System using Bluetooth Low Energy and Trilateration\n\nBahri Rizaldi</string>
 
     <string name="dialog_yes">Yes</string>
     <string name="dialog_cancel">Cancel</string>
@@ -17,9 +24,17 @@
     <string name="snackbar_location_permission">Location permission not granted</string>
 
     <!-- Ble scan error messages -->
-    <string name="error_bluetooth_not_available">Bluetooth LE not available$$Sorry, this device does not support Bluetooth LE.</string>
-    <string name="error_bluetooth_disabled">Bluetooth not enabled$$Please enable bluetooth in settings and restart this application.</string>
-    <string name="error_location_permission_missing">Functionality limited$$Since location access has not been granted, this app will not be able to discover beacons when in the background.</string>
-    <string name="error_location_services_disabled">This app needs location access$$Please grant location access so this app can detect beacons in the background.</string>
+    <string name="error_bluetooth_not_available">Bluetooth LE not available$$Sorry, this device does not support
+        Bluetooth LE.
+    </string>
+    <string name="error_bluetooth_disabled">Bluetooth not enabled$$Please enable bluetooth in settings and restart this
+        application.
+    </string>
+    <string name="error_location_permission_missing">Functionality limited$$Since location access has not been granted,
+        this app will not be able to discover beacons when in the background.
+    </string>
+    <string name="error_location_services_disabled">This app needs location access$$Please grant location access so this
+        app can detect beacons in the background.
+    </string>
 
 </resources>
