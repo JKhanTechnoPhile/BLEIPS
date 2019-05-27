@@ -48,7 +48,7 @@ dependencies {
     // Search Algorithm
     implementation 'es.usc.citius.hipster:hipster-core:1.0.1'
 
-    // Klaxon
+    // Klaxon Json Parser
     implementation 'com.beust:klaxon:5.0.5'
 
     testImplementation 'junit:junit:4.12'

@@ -2,17 +2,20 @@ package com.android.bleips.activity
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.os.Build
-import android.os.Bundle
-import android.os.Handler
-import android.os.RemoteException
+import android.os.*
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.bleips.R
 import com.android.bleips.util.DialogBuilder
 import kotlinx.android.synthetic.main.activity_range_test.*
 import org.altbeacon.beacon.*
+import java.io.File
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -21,6 +24,7 @@ class RangeTestActivity : AppCompatActivity(), BeaconConsumer {
     private val TAG = "TestingBeacon"
     private val PERMISSION_REQUEST_COARSE_LOCATION = 1
     private var logString = ""
+    private var logRssiString = ""
 
     private lateinit var beaconManager: BeaconManager
 
@@ -62,6 +66,50 @@ class RangeTestActivity : AppCompatActivity(), BeaconConsumer {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.menu_testing_range, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle item selection
+        return when (item.itemId) {
+            R.id.clear -> {
+                logString = ""
+                logRssiString = ""
+                text_log.text = ""
+                true
+            }
+            R.id.export -> {
+                val state = Environment.getExternalStorageState()
+                if (Environment.MEDIA_MOUNTED == state) {
+                    val calendar = Calendar.getInstance()
+                    val dateFormat = SimpleDateFormat("dd-MM-yyyy_HH-mm-ss", Locale.getDefault())
+                    val currentDate = dateFormat.format(calendar.time)
+
+                    val fileName = "BLEIPS_$currentDate.txt"
+                    val file = File(getExternalFilesDir(null), fileName)
+
+                    try {
+                        file.createNewFile()
+                        val outputStream = FileOutputStream(file, true)
+                        outputStream.write(logRssiString.toByteArray())
+                        outputStream.flush()
+                        outputStream.close()
+
+                        Toast.makeText(this, "$fileName created", Toast.LENGTH_SHORT).show()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         beaconManager.unbind(this)
@@ -84,10 +132,10 @@ class RangeTestActivity : AppCompatActivity(), BeaconConsumer {
                         "\n\n"
 
                 logString += newLine
+                logRssiString += "${beacon.rssi}\n"
 
                 text_log.text = logString
                 scrollDown()
-//                scroll_view.fullScroll(View.FOCUS_DOWN)
             }
         }
 
@@ -123,7 +171,5 @@ class RangeTestActivity : AppCompatActivity(), BeaconConsumer {
                 scroll_view.fullScroll(View.FOCUS_DOWN)
             }, 200
         )
-
-//        Runnable { scroll_view.fullScroll(View.FOCUS_DOWN) }
     }
 }

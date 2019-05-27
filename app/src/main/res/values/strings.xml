@@ -17,6 +17,9 @@
     <string name="text_test_stop">Stop</string>
     <string name="text_about">Indoor Positioning System using Bluetooth Low Energy and Trilateration\n\nBahri Rizaldi</string>
 
+    <string name="menu_test_clear">Clear</string>
+    <string name="menu_test_export">Export</string>
+
     <string name="dialog_yes">Yes</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_no">No</string>
