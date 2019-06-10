@@ -18,6 +18,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class RangeTestActivity : AppCompatActivity(), BeaconConsumer {
 
@@ -25,6 +26,7 @@ class RangeTestActivity : AppCompatActivity(), BeaconConsumer {
     private val PERMISSION_REQUEST_COARSE_LOCATION = 1
     private var logString = ""
     private var logRssiString = ""
+    private val listRssi: ArrayList<Int> = ArrayList()
 
     private lateinit var beaconManager: BeaconManager
 
@@ -63,6 +65,7 @@ class RangeTestActivity : AppCompatActivity(), BeaconConsumer {
 
         btn_test_stop.setOnClickListener {
             beaconManager.unbind(this)
+            getResult()
         }
     }
 
@@ -76,9 +79,7 @@ class RangeTestActivity : AppCompatActivity(), BeaconConsumer {
         // Handle item selection
         return when (item.itemId) {
             R.id.clear -> {
-                logString = ""
-                logRssiString = ""
-                text_log.text = ""
+                clearData()
                 true
             }
             R.id.export -> {
@@ -131,6 +132,7 @@ class RangeTestActivity : AppCompatActivity(), BeaconConsumer {
                         "RSSI: ${beacon.rssi} Distance: ${beacon.distance}" +
                         "\n\n"
 
+                listRssi.add(beacon.rssi)
                 logString += newLine
                 logRssiString += "${beacon.rssi}\n"
 
@@ -171,5 +173,22 @@ class RangeTestActivity : AppCompatActivity(), BeaconConsumer {
                 scroll_view.fullScroll(View.FOCUS_DOWN)
             }, 200
         )
+    }
+
+    private fun getResult() {
+        val newLine = "Average RSSI: ${listRssi.average()}\n\n"
+
+        logString += newLine
+        text_log.text = logString
+        scrollDown()
+
+        listRssi.clear()
+    }
+
+    private fun clearData() {
+        logString = ""
+        logRssiString = ""
+        text_log.text = ""
+        listRssi.clear()
     }
 }
