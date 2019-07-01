@@ -35,7 +35,7 @@ class ListRouteFragment : Fragment(), BeaconConsumer {
     private var sectionNumber = 0
 
     private lateinit var rootLayout: View
-    private lateinit var floors:Array<String>
+    private lateinit var floors: Array<String>
     private lateinit var mContext: Context
     private lateinit var beaconManager: BeaconManager
     private lateinit var loadingDialog: LoadingDialog

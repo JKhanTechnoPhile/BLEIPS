@@ -91,6 +91,9 @@ class MapActivity : AppCompatActivity(), BeaconConsumer {
                 var nearestBeacon = beacons.first()
 
                 for ((i, beacon: Beacon) in beacons.withIndex()) {
+                    if (beacon.id2.toInt() != currentFloor)
+                        continue
+
                     if (beacon.distance < nearestBeacon.distance)
                         nearestBeacon = beacon
 
@@ -100,21 +103,23 @@ class MapActivity : AppCompatActivity(), BeaconConsumer {
                     positions[i][1] = beaconObj.int("y")!!.toDouble()
                 }
 
-                val solver = NonLinearLeastSquaresSolver(TrilaterationFunction(positions, distances), LevenbergMarquardtOptimizer())
-                val optimum = solver.solve()
+                if (distances.size >= 3) {
+                    val solver = NonLinearLeastSquaresSolver(TrilaterationFunction(positions, distances), LevenbergMarquardtOptimizer())
+                    val optimum = solver.solve()
 
-                val currentLocation = optimum.point.toArray()
-                Log.i(TAG, "Current Location = ${currentLocation[0]} ${currentLocation[1]}")
+                    val currentLocation = optimum.point.toArray()
+                    Log.i(TAG, "Current Location = ${currentLocation[0]} ${currentLocation[1]}")
 
-                val nearestBeaconObj = getBeaconData(nearestBeacon.id2.toInt(), nearestBeacon.id3.toInt())
-                if (nearestBeaconObj.int("room_code")!! > 0) {
-                    Log.i(TAG, "nearestBeacon = ${currentLocation[0].toInt()} ${currentLocation[1].toInt()}")
-                    drawRoute(Point(currentLocation[0].toInt(), currentLocation[1].toInt()),
-                        nearestBeaconObj.int("room_code")!!
-                    )
-                }
-                else {
-                    drawRoute(Point(currentLocation[0].toInt(), currentLocation[1].toInt()),0)
+                    val nearestBeaconObj = getBeaconData(nearestBeacon.id2.toInt(), nearestBeacon.id3.toInt())
+                    if (nearestBeaconObj.int("room_code")!! > 0) {
+                        Log.i(TAG, "nearestBeacon = ${currentLocation[0].toInt()} ${currentLocation[1].toInt()}")
+                        drawRoute(Point(currentLocation[0].toInt(), currentLocation[1].toInt()),
+                            nearestBeaconObj.int("room_code")!!
+                        )
+                    }
+                    else {
+                        drawRoute(Point(currentLocation[0].toInt(), currentLocation[1].toInt()),0)
+                    }
                 }
             }
         }

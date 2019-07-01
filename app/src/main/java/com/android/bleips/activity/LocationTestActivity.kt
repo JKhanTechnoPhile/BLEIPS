@@ -12,27 +12,32 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.bleips.R
 import com.android.bleips.util.DialogBuilder
-import kotlinx.android.synthetic.main.activity_range_test.*
+import com.android.bleips.util.JsonParser
+import com.beust.klaxon.JsonObject
+import com.lemmingapex.trilateration.NonLinearLeastSquaresSolver
+import com.lemmingapex.trilateration.TrilaterationFunction
+import kotlinx.android.synthetic.main.activity_location_test.*
 import org.altbeacon.beacon.*
+import org.apache.commons.math3.fitting.leastsquares.LevenbergMarquardtOptimizer
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
-class RangeTestActivity : AppCompatActivity(), BeaconConsumer {
+class LocationTestActivity : AppCompatActivity(), BeaconConsumer {
 
     private val TAG = "TestingBeacon"
     private val PERMISSION_REQUEST_COARSE_LOCATION = 1
-    private var logString = ""
-    private var logRssiString = ""
-    private val listRssi: ArrayList<Int> = ArrayList()
 
     private lateinit var beaconManager: BeaconManager
 
+    private var logString = ""
+    private var logLocationString = ""
+    private val listLocation: ArrayList<DoubleArray> = ArrayList()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_range_test)
+        setContentView(R.layout.activity_location_test)
 
         actionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -65,7 +70,6 @@ class RangeTestActivity : AppCompatActivity(), BeaconConsumer {
 
         btn_test_stop.setOnClickListener {
             beaconManager.unbind(this)
-            getResult()
         }
     }
 
@@ -89,13 +93,13 @@ class RangeTestActivity : AppCompatActivity(), BeaconConsumer {
                     val dateFormat = SimpleDateFormat("dd-MM-yyyy_HH-mm-ss", Locale.getDefault())
                     val currentDate = dateFormat.format(calendar.time)
 
-                    val fileName = "BLEIPS_BEACON_$currentDate.txt"
+                    val fileName = "BLEIPS_LOCATION_$currentDate.txt"
                     val file = File(getExternalFilesDir(null), fileName)
 
                     try {
                         file.createNewFile()
                         val outputStream = FileOutputStream(file, true)
-                        outputStream.write(logRssiString.toByteArray())
+                        outputStream.write(logLocationString.toByteArray())
                         outputStream.flush()
                         outputStream.close()
 
@@ -111,33 +115,48 @@ class RangeTestActivity : AppCompatActivity(), BeaconConsumer {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        beaconManager.unbind(this)
-    }
-
     override fun onBeaconServiceConnect() {
         val rangeNotifier = RangeNotifier { beacons, _ ->
             Log.d(TAG, "didRangeBeaconsInRegion called with beacon count:  ${beacons.size}")
 
-            val calendar = Calendar.getInstance()
-            val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
-            val currentDate = dateFormat.format(calendar.time)
+            var currentFloor = -1
 
-            for ((i, beacon: Beacon) in beacons.withIndex()) {
-                val newLine = "" +
-                        "$currentDate\n" +
-                        "${beacon.bluetoothAddress}\n" +
-                        "Major: ${beacon.id2} Minor: ${beacon.id3} TxPower: ${beacon.txPower}\n" +
-                        "RSSI: ${beacon.rssi} Distance: ${beacon.distance}" +
-                        "\n\n"
+            if (beacons.isNotEmpty()) {
+                var nearestBeacon = beacons.first()
+                beacons.forEach {
+                    if (it.distance < nearestBeacon.distance)
+                        nearestBeacon = it
+                }
+                currentFloor = nearestBeacon.id2.toInt()
+            }
 
-                listRssi.add(beacon.rssi)
-                logString += newLine
-                logRssiString += "${beacon.rssi}\n"
+            if (beacons.size >= 3) {
+                val distances = DoubleArray(beacons.size)
+                val positions = Array(beacons.size) { DoubleArray(2) }
 
-                text_log.text = logString
-                scrollDown()
+                for ((i, beacon: Beacon) in beacons.withIndex()) {
+                    if (beacon.id2.toInt() != currentFloor)
+                        continue
+
+                    val beaconObj = getBeaconData(beacon.id2.toInt(), beacon.id3.toInt())
+                    distances[i] = beacon.distance
+                    positions[i][0] = beaconObj.int("x")!!.toDouble()
+                    positions[i][1] = beaconObj.int("y")!!.toDouble()
+                }
+
+                if (distances.size >= 3) {
+                    val solver = NonLinearLeastSquaresSolver(TrilaterationFunction(positions, distances), LevenbergMarquardtOptimizer())
+                    val optimum = solver.solve()
+
+                    val currentLocation = optimum.point.toArray()
+                    Log.i(TAG, "Current Location = ${currentLocation[0]} ${currentLocation[1]}")
+
+                    printData(currentFloor, beacons.size, currentLocation)
+                }
+            }
+            else {
+                val currentLocation = doubleArrayOf()
+                printData(currentFloor, beacons.size, currentLocation)
             }
         }
 
@@ -146,6 +165,11 @@ class RangeTestActivity : AppCompatActivity(), BeaconConsumer {
             beaconManager.removeAllRangeNotifiers()
             beaconManager.addRangeNotifier(rangeNotifier)
         } catch (e: RemoteException) { }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        beaconManager.unbind(this)
     }
 
     private fun verifyBluetooth() {
@@ -175,20 +199,39 @@ class RangeTestActivity : AppCompatActivity(), BeaconConsumer {
         )
     }
 
-    private fun getResult() {
-        val newLine = "Average RSSI: ${listRssi.average()}\n\n"
+    private fun printData(currentFloor: Int, beaconSize: Int, currentLocation: DoubleArray) {
+        logString += if (currentLocation.isNotEmpty()) {
+            "" +
+                    "Current floor: $currentFloor\n" +
+                    "Beacon in range: $beaconSize\n" +
+                    "Current Location: ${currentLocation[0]} ${currentLocation[1]}" +
+                    "\n\n"
+        } else {
+            "" +
+                    "Current floor: $currentFloor\n" +
+                    "Beacon in range: $beaconSize\n" +
+                    "Cannot determine current location, beacon in range less than 3"+
+                    "\n\n"
+        }
 
-        logString += newLine
+        if ( currentLocation.isNotEmpty())
+            logLocationString += "${currentLocation[0]} ${currentLocation[1]}\n"
+
+        listLocation.add(currentLocation)
         text_log.text = logString
         scrollDown()
+    }
 
-        listRssi.clear()
+    private fun getBeaconData(major: Int, minor: Int) : JsonObject {
+        val jsonString = StringBuilder(resources.openRawResource(R.raw.beacons)
+            .bufferedReader().use { it.readText() })
+
+        return JsonParser.getBeacon(jsonString, major, minor)
     }
 
     private fun clearData() {
         logString = ""
-        logRssiString = ""
+        listLocation.clear()
         text_log.text = ""
-        listRssi.clear()
     }
 }

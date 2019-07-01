@@ -5,8 +5,9 @@
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-                     android:maxSdkVersion="18"/>
+    <uses-permission
+            android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+            android:maxSdkVersion="18"/>
 
     <application
             android:allowBackup="true"
@@ -16,6 +17,17 @@
             android:supportsRtl="true"
             android:theme="@style/Theme.Base"
             tools:ignore="GoogleAppIndexingWarning">
+        <activity
+                android:name=".activity.LocationTestActivity"
+                android:label="@string/label_testing_location"
+                android:parentActivityName=".activity.MainActivity"
+                android:theme="@style/Theme.Base.ActionBar">
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value=".activity.MainActivity"/>
+        </activity>
         <activity
                 android:name=".activity.DrawerTestActivity"
                 android:label="@string/label_testing_drawer"

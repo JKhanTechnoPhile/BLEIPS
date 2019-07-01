@@ -7,15 +7,18 @@
     <string name="label_map">Map</string>
     <string name="label_testing_range">Beacon Range Test</string>
     <string name="label_testing_drawer">Drawer Test</string>
+    <string name="label_testing_location">Location Test</string>
 
     <string name="text_floor_one">Lantai 1</string>
     <string name="text_floor_two">Lantai 2</string>
     <string name="text_floor_three">Lantai 3</string>
     <string name="text_test_range">Beacon Range</string>
     <string name="text_test_drawing">Drawer Test</string>
+    <string name="text_test_location">Location Test</string>
     <string name="text_test_start">Start</string>
     <string name="text_test_stop">Stop</string>
-    <string name="text_about">Indoor Positioning System using Bluetooth Low Energy and Trilateration\n\nBahri Rizaldi</string>
+    <string name="text_about">Indoor Positioning System using Bluetooth Low Energy and Trilateration\n\nBahri Rizaldi
+    </string>
 
     <string name="menu_test_clear">Clear</string>
     <string name="menu_test_export">Export</string>
