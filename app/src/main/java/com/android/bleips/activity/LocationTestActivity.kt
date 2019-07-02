@@ -231,6 +231,7 @@ class LocationTestActivity : AppCompatActivity(), BeaconConsumer {
 
     private fun clearData() {
         logString = ""
+        logLocationString = ""
         listLocation.clear()
         text_log.text = ""
     }
